@@ -231,9 +231,13 @@ body {
   position: relative;
 }
 
-/* Canvas de Three.js ocupa todo el contenedor */
+/* Canvas de Three.js ocupa todo el contenedor.
+   Posición absoluta: así su tamaño NUNCA influye en el layout y evita
+   el bucle de crecimiento infinito del ResizeObserver de R3F. */
 .avatar-contenedor canvas {
   display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }

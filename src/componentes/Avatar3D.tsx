@@ -79,19 +79,19 @@ function Avatar3D({ hablando }: Avatar3DProps) {
       >
         {/*
           No asumimos la escala ni la posición del modelo: <Center> lo centra
-          en el origen y <Bounds fit clip observe> ajusta la cámara
-          automáticamente para que el avatar siempre quede encuadrado,
-          sin importar las dimensiones del archivo .glb.
+          en el origen y <Bounds fit clip> ajusta la cámara una vez para que el
+          avatar quede encuadrado, sin importar las dimensiones del .glb.
+          (Sin "observe" para no provocar bucles de redimensionado.)
         */}
         <Canvas
           camera={{ position: [0, 0, 5], fov: 40 }}
-          style={{ width: '100%', height: '100%', display: 'block' }}
+          style={{ position: 'absolute', inset: 0, display: 'block' }}
         >
           <ambientLight intensity={1.0} />
           <directionalLight position={[2, 4, 3]} intensity={1.4} />
           <directionalLight position={[-2, 1, 1]} intensity={0.4} />
           <Suspense fallback={null}>
-            <Bounds fit clip observe margin={1.1}>
+            <Bounds fit clip margin={1.1}>
               <Center>
                 <ModeloAvatar hablando={hablando} />
               </Center>
