@@ -1,104 +1,67 @@
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
 
-// Convierte el nombre de usuario en un correo válido para Supabase Auth.
-const obtenerCorreoSimulado = (nombreUsuario: string) =>
-  `${nombreUsuario.trim().toLowerCase()}@chatbot.facultad`
+type PantallaLoginProps = {
+  onEntrar: (nombre: string) => void
+}
 
-// Pantalla principal de inicio de sesión del Chatbot Facultad.
-function PantallaLogin() {
-  const [nombreUsuario, setNombreUsuario] = useState('')
-  const [contrasena, setContrasena] = useState('')
+function PantallaLogin({ onEntrar }: PantallaLoginProps) {
+  const [nombre, setNombre] = useState('')
   const [mensajeError, setMensajeError] = useState<string | null>(null)
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
-  const [cargando, setCargando] = useState(false)
 
-  const manejarEnvio = async (evento: React.FormEvent<HTMLFormElement>) => {
+  const manejarEnvio = (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault()
     setMensajeError(null)
-    setMensajeExito(null)
 
-    if (!nombreUsuario.trim() || !contrasena) {
-      setMensajeError('Completa el nombre de usuario y la contraseña.')
+    if (!nombre.trim()) {
+      setMensajeError('Por favor, escribe tu nombre para continuar.')
       return
     }
 
-    setCargando(true)
-    try {
-      const correoSimulado = obtenerCorreoSimulado(nombreUsuario)
-      const { error } = await supabase.auth.signInWithPassword({
-        email: correoSimulado,
-        password: contrasena,
-      })
-
-      if (error) {
-        setMensajeError(`No se pudo iniciar sesión: ${error.message}`)
-        return
-      }
-
-      setMensajeExito('Sesión iniciada correctamente.')
-    } catch (error) {
-      console.error('Error al iniciar sesión.', error)
-      setMensajeError('Ocurrió un error inesperado al iniciar sesión.')
-    } finally {
-      setCargando(false)
-    }
+    onEntrar(nombre.trim())
   }
 
   return (
-    <section className="tarjeta">
-      <h2 className="titulo">Iniciar sesión</h2>
-      <p className="texto-secundario">
-        Ingresa con tu nombre de usuario para acceder al asistente.
-      </p>
+    <div className="login-wrapper">
+      <div className="login-hero">
+        <div className="login-icono">🏛️</div>
+        <h1 className="login-facultad">Facultad de Ingeniería</h1>
+        <p className="login-universidad">Universidad del Beni · UEB</p>
+      </div>
 
-      <form className="formulario" onSubmit={manejarEnvio}>
-        <label className="grupo-campo">
-          <span className="etiqueta">Nombre de usuario</span>
-          <input
-            className="campo-texto"
-            type="text"
-            autoComplete="username"
-            value={nombreUsuario}
-            onChange={(evento) => setNombreUsuario(evento.target.value)}
-          />
-        </label>
+      <section className="tarjeta">
+        <h2 className="titulo">¡Bienvenido!</h2>
+        <p className="texto-secundario">
+          Escribe tu nombre y el asistente virtual resolverá tus dudas sobre las carreras de la facultad.
+        </p>
 
-        <label className="grupo-campo">
-          <span className="etiqueta">Contraseña</span>
-          <input
-            className="campo-texto"
-            type="password"
-            autoComplete="current-password"
-            value={contrasena}
-            onChange={(evento) => setContrasena(evento.target.value)}
-          />
-        </label>
+        <form className="formulario" onSubmit={manejarEnvio}>
+          <label className="grupo-campo">
+            <span className="etiqueta">¿Cuál es tu nombre?</span>
+            <input
+              className="campo-texto"
+              type="text"
+              autoComplete="given-name"
+              autoFocus
+              placeholder="Por ejemplo: Leo"
+              value={nombre}
+              onChange={(evento) => setNombre(evento.target.value)}
+            />
+          </label>
 
-        {mensajeError ? (
-          <p className="mensaje-error" role="alert">
-            {mensajeError}
-          </p>
-        ) : null}
+          {mensajeError ? (
+            <p className="mensaje-error" role="alert">
+              {mensajeError}
+            </p>
+          ) : null}
 
-        {mensajeExito ? (
-          <p className="mensaje-exito" role="status">
-            {mensajeExito}
-          </p>
-        ) : null}
+          <button className="boton-principal" type="submit">
+            Iniciar conversación
+          </button>
+        </form>
+      </section>
 
-        <button className="boton-principal" type="submit" disabled={cargando}>
-          {cargando ? 'Ingresando...' : 'Entrar'}
-        </button>
-      </form>
-
-      <p className="texto-secundario">
-        ¿No tienes cuenta?{' '}
-        <a className="enlace" href="/registro">
-          Crear usuario
-        </a>
-      </p>
-    </section>
+      <p className="login-pie">Asistente virtual de consultas académicas</p>
+    </div>
   )
 }
 

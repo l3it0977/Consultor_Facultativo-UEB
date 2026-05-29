@@ -1,16 +1,14 @@
+import { useNombre } from './hooks/useNombre'
 import PantallaLogin from './componentes/PantallaLogin'
+import PantallaChat from './componentes/PantallaChat'
 
 function App() {
-  return (
-    <main className="contenedor-principal">
-      <header className="encabezado">
-        <h1>Chatbot Facultad</h1>
-        <p className="texto-secundario">
-          Accede con tu cuenta institucional para iniciar una consulta oficial.
-        </p>
-      </header>
-      <PantallaLogin />
-    </main>
+  const { nombre, setNombre, cerrarSesion } = useNombre()
+
+  return nombre ? (
+    <PantallaChat nombre={nombre} onCerrarSesion={cerrarSesion} />
+  ) : (
+    <PantallaLogin onEntrar={setNombre} />
   )
 }
 

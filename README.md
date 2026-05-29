@@ -1,73 +1,76 @@
-# React + TypeScript + Vite
+# Consultor Facultativo UEB — Chatbot IA de la Facultad
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Asistente virtual con IA para la Facultad de Ingeniería. Los estudiantes escriben su
+nombre, conversan con un chatbot que responde dudas sobre las carreras a partir de
+documentos PDF indexados, y un **avatar 3D** pronuncia en voz alta cada respuesta.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Frontend:** Vite + React 19 + TypeScript
+- **3D:** three.js + @react-three/fiber + @react-three/drei (avatar `.glb`)
+- **Voz:** Web Speech API del navegador (TTS en español)
+- **Base de datos:** Supabase (PostgreSQL + pgvector)
+- **Embeddings:** Hugging Face (`sentence-transformers/all-MiniLM-L6-v2`, 384 dims)
+- **LLM:** Google Gemini (`gemini-1.5-flash`)
 
-## React Compiler
+## Módulos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Autenticación / Acceso** — login solo con nombre (sin contraseña), guardado en
+   `localStorage`. El bot saluda por el nombre ("Hola Leo").
+2. **Indexación de PDFs** (`scripts/`) — extrae texto, divide en chunks, genera
+   embeddings y los guarda en la tabla `documentos_facultad`.
+3. **Chatbot RAG** — pregunta → embedding → búsqueda vectorial → Gemini → respuesta
+   hablada por el avatar. La lógica corre en la Edge Function `consultar`.
 
-## Expanding the ESLint configuration
+## Puesta en marcha
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Base de datos (una vez)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Ejecutar `supabase/sql/setup.sql` en el editor SQL del panel de Supabase. Crea la
+extensión `vector`, la tabla `documentos_facultad`, el índice y la función
+`match_documentos`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 2. Indexar documentos
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd scripts
+cp .env.example .env   # completar SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, HF_API_KEY
+npm install
+npm run indexar -- ruta/al/documento.pdf
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 3. Edge Function (el cerebro)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Requiere [Supabase CLI](https://supabase.com/docs/guides/cli).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+supabase login
+supabase link --project-ref <TU_PROJECT_REF>
+# Secrets (SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY se inyectan solos)
+supabase secrets set HF_API_KEY=xxxx GEMINI_API_KEY=xxxx
+supabase functions deploy consultar
 ```
+
+Conseguir la API key de Gemini (gratis) en https://aistudio.google.com/apikey
+
+### 4. Frontend
+
+```bash
+cp .env.example .env.local   # completar VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
+npm install
+npm run dev
+```
+
+### 5. Avatar 3D
+
+Colocar el modelo del avatar en `public/avatar.glb`. Si el `.glb` incluye animaciones,
+se reproduce la primera mientras el avatar habla; si no, se aplica un balanceo sutil.
+
+## Scripts
+
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo (frontend) |
+| `npm run build` | Compilación de producción |
+| `npm run lint` | ESLint |
+| `npm run indexar` (en `scripts/`) | Indexa un PDF en Supabase |

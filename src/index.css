@@ -1,127 +1,532 @@
+/* ===== Variables — paleta UEB (rojo y blanco) ===== */
 :root {
-  font-family: 'Inter', system-ui, sans-serif;
-  color: #2f2f2f;
-  background-color: #ffffff;
+  --rojo:          #C0392B;
+  --rojo-hover:    #A93226;
+  --rojo-oscuro:   #7B241C;
+  --rojo-claro:    #F5B7B1;
+  --rojo-suave:    #FDEDEC;
+  --blanco:        #FFFFFF;
+  --gris-fondo:    #F7F8FA;
+  --gris-borde:    #E4E7EB;
+  --texto:         #1A1A2E;
+  --texto-muted:   #6B7280;
+  --sombra:        0 4px 24px rgba(192, 57, 43, 0.12);
+  --sombra-fuerte: 0 16px 48px rgba(0, 0, 0, 0.20);
+  --radio:         18px;
+
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--texto);
 }
 
 * {
   box-sizing: border-box;
-}
-
-body {
   margin: 0;
-  background-color: #f5f5f5;
+  padding: 0;
 }
 
+html, body {
+  height: 100%;
+}
+
+/* Fondo rojo de la UEB — visible alrededor del login */
+body {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #C0392B 0%, #922B21 60%, #7B241C 100%);
+}
+
+/* Centrado para la pantalla de login */
 #root {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
+  padding: 24px 16px;
 }
 
-.contenedor-principal {
+/* ========================================================
+   LOGIN
+   ======================================================== */
+.login-wrapper {
   width: 100%;
   max-width: 440px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: stretch;
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-fuerte);
+  overflow: hidden;
 }
 
-.encabezado h1 {
-  margin: 0 0 8px;
-  color: #e24b4a;
-  font-size: 32px;
+.login-hero {
+  background: rgba(0, 0, 0, 0.22);
+  padding: 40px 28px 32px;
+  text-align: center;
+  color: var(--blanco);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.texto-secundario {
-  margin: 0;
-  color: #6b7280;
-  font-size: 14px;
+.login-icono {
+  font-size: 58px;
+  line-height: 1;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.30));
+}
+
+.login-facultad {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin-bottom: 5px;
+}
+
+.login-universidad {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  opacity: 0.75;
 }
 
 .tarjeta {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e5e7eb;
+  background: var(--blanco);
+  padding: 34px 30px 38px;
 }
 
 .titulo {
-  margin: 0 0 8px;
-  color: #111827;
   font-size: 22px;
+  font-weight: 700;
+  color: var(--texto);
+  margin-bottom: 6px;
+}
+
+.texto-secundario {
+  color: var(--texto-muted);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .formulario {
-  margin-top: 16px;
+  margin-top: 26px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .grupo-campo {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .etiqueta {
   font-weight: 600;
-  color: #111827;
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--texto);
 }
 
 .campo-texto {
-  border: 1px solid #d1d5db;
+  border: 1.5px solid var(--gris-borde);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-size: 14px;
+  font-family: inherit;
+  color: var(--texto);
+  background: var(--blanco);
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .campo-texto:focus {
-  outline: 2px solid rgba(226, 75, 74, 0.3);
-  border-color: #e24b4a;
+  outline: none;
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+}
+
+.campo-texto:disabled {
+  background: var(--gris-fondo);
+  color: var(--texto-muted);
+  cursor: not-allowed;
 }
 
 .boton-principal {
   border: none;
   border-radius: 10px;
-  padding: 12px;
-  font-weight: 600;
-  background-color: #e24b4a;
-  color: #ffffff;
+  padding: 13px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+  background: var(--rojo);
+  color: var(--blanco);
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.boton-principal:hover:not(:disabled) {
+  background: var(--rojo-hover);
+  box-shadow: 0 4px 16px rgba(192, 57, 43, 0.45);
+  transform: translateY(-1px);
+}
+
+.boton-principal:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .boton-principal:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
 .mensaje-error {
-  margin: 0;
-  padding: 10px 12px;
+  padding: 11px 14px;
   border-radius: 8px;
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background: var(--rojo-suave);
+  color: var(--rojo-oscuro);
   font-size: 13px;
+  border: 1px solid var(--rojo-claro);
 }
 
-.mensaje-exito {
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 8px;
-  background-color: #dcfce7;
-  color: #166534;
-  font-size: 13px;
+.login-pie {
+  background: var(--blanco);
+  padding: 14px 28px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--texto-muted);
+  border-top: 1px solid var(--gris-borde);
 }
 
-.enlace {
-  color: #e24b4a;
-  text-decoration: none;
+/* ========================================================
+   CHAT — pantalla completa
+   ======================================================== */
+.chat-root {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  background: var(--blanco);
+  overflow: hidden;
+}
+
+/* ---- Panel izquierdo: avatar ---- */
+.avatar-panel {
+  background: linear-gradient(180deg, #A93226 0%, #7B241C 55%, #641E16 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 14px 22px;
+  gap: 12px;
+  height: 100%;
+  border-right: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+.avatar-contenedor {
+  width: 100%;
+  flex: 1;
+  min-height: 0;        /* permite que flex: 1 comprima correctamente */
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  position: relative;
+}
+
+/* Canvas de Three.js ocupa todo el contenedor */
+.avatar-contenedor canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fallback emoji */
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+}
+
+.avatar-hablando {
+  animation: avatar-pulso 0.38s ease-in-out infinite alternate;
+}
+
+@keyframes avatar-pulso {
+  from { transform: scale(1); }
+  to   { transform: scale(1.09); }
+}
+
+/* Nombre del asistente */
+.avatar-nombre {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: center;
+  letter-spacing: 0.2px;
+  flex-shrink: 0;
+}
+
+/* Indicador de estado */
+.avatar-estado {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  flex-shrink: 0;
+}
+
+.avatar-estado-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  flex-shrink: 0;
+  animation: dot-pulso 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulso {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* Ondas de voz */
+.avatar-ondas {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.avatar-ondas span {
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.80);
+  animation: onda-anim 0.8s ease-in-out infinite;
+}
+
+.avatar-ondas span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+.avatar-ondas span:nth-child(2) { height: 12px; animation-delay: 0.12s; }
+.avatar-ondas span:nth-child(3) { height: 18px; animation-delay: 0.24s; }
+.avatar-ondas span:nth-child(4) { height: 12px; animation-delay: 0.36s; }
+.avatar-ondas span:nth-child(5) { height: 6px;  animation-delay: 0.48s; }
+
+@keyframes onda-anim {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+  50%       { transform: scaleY(1);   opacity: 1; }
+}
+
+/* ---- Panel derecho: mensajes ---- */
+.chat-panel-derecho {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.chat-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 2px solid var(--rojo);
+  background: var(--blanco);
+  flex-shrink: 0;
+}
+
+.chat-encabezado-titulo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--rojo);
+}
+
+.chat-encabezado-subtitulo {
+  font-size: 13px;
+  color: var(--texto-muted);
+  margin-top: 2px;
+}
+
+.boton-salir {
+  background: none;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
   font-weight: 600;
+  font-family: inherit;
+  color: var(--texto-muted);
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+.boton-salir:hover {
+  border-color: var(--rojo);
+  color: var(--rojo);
+  background: var(--rojo-suave);
+}
+
+/* Área de mensajes */
+.chat-mensajes {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--gris-fondo);
+  scroll-behavior: smooth;
+}
+
+.chat-mensajes::-webkit-scrollbar       { width: 4px; }
+.chat-mensajes::-webkit-scrollbar-track { background: transparent; }
+.chat-mensajes::-webkit-scrollbar-thumb { background: var(--rojo-claro); border-radius: 4px; }
+
+/* Burbujas */
+.burbuja {
+  max-width: 75%;
+  padding: 11px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.burbuja p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.burbuja-usuario {
+  align-self: flex-end;
+  background: var(--rojo);
+  color: var(--blanco);
+  border-bottom-right-radius: 5px;
+}
+
+.burbuja-bot {
+  align-self: flex-start;
+  background: var(--blanco);
+  color: var(--texto);
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  border: 1px solid var(--gris-borde);
+}
+
+/* Indicador escribiendo */
+.burbuja-cargando {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 13px 18px;
+}
+
+.dot-typing {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rojo-claro);
+  animation: typing-bounce 1.3s ease-in-out infinite;
+}
+
+.dot-typing:nth-child(2) { animation-delay: 0.18s; }
+.dot-typing:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0);   opacity: 0.4; }
+  30%            { transform: translateY(-7px); opacity: 1; }
+}
+
+/* Formulario de entrada */
+.chat-formulario {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--gris-borde);
+  background: var(--blanco);
+  flex-shrink: 0;
+}
+
+.chat-formulario .campo-texto {
+  flex: 1;
+  border-radius: 12px;
+}
+
+.chat-formulario .boton-principal {
+  padding: 12px 22px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* ========================================================
+   RESPONSIVE — móvil
+   ======================================================== */
+@media (max-width: 640px) {
+  /* Login ocupa la pantalla completa */
+  #root {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .login-wrapper {
+    max-width: 100%;
+    border-radius: 0;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+
+  .tarjeta {
+    flex: 1;
+  }
+
+  /* Chat: columna única */
+  .chat-root {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  /* Panel del avatar: barra horizontal en la parte superior */
+  .avatar-panel {
+    flex-direction: row;
+    padding: 10px 16px;
+    gap: 12px;
+    height: auto;
+    align-items: center;
+  }
+
+  .avatar-contenedor {
+    width: 52px;
+    height: 52px;
+    min-height: unset;
+    flex: unset;
+    border-radius: 50%;
+  }
+
+  .avatar-placeholder {
+    min-height: unset;
+    font-size: 26px;
+  }
+
+  .avatar-ondas { display: none; }
+
+  .avatar-nombre {
+    font-size: 12px;
+  }
+
+  /* El panel de mensajes ocupa el resto */
+  .chat-panel-derecho {
+    height: 100%;
+  }
+
+  .chat-mensajes {
+    padding: 14px 14px;
+  }
+
+  .chat-formulario {
+    padding: 10px 14px;
+  }
+
+  .burbuja {
+    max-width: 88%;
+  }
 }
