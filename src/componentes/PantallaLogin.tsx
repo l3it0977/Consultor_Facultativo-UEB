@@ -25,7 +25,7 @@ function PantallaLogin({ onEntrar }: PantallaLoginProps) {
       <div className="login-hero">
         <div className="login-icono">🏛️</div>
         <h1 className="login-facultad">Facultad de Ingeniería</h1>
-        <p className="login-universidad">Universidad del Beni · UEB</p>
+        <p className="login-universidad">Universidad Evangelica Boliviana · UEB</p>
       </div>
 
       <section className="tarjeta">

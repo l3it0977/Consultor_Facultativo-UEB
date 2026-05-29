@@ -1,6 +1,6 @@
 import { Component, Suspense, useEffect, useRef, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, useAnimations, useGLTF } from '@react-three/drei'
+import { Bounds, Center, useAnimations, useGLTF } from '@react-three/drei'
 import type { Group } from 'three'
 
 class LimiteErrorAvatar extends Component<
@@ -78,27 +78,25 @@ function Avatar3D({ hablando }: Avatar3DProps) {
         }
       >
         {/*
-          Cámara ajustada para ver la cara del avatar:
-          posición a la altura de los ojos, mirando hacia el rostro.
-          target apunta al área de la cabeza (y ≈ 1.55 en escala metros).
+          No asumimos la escala ni la posición del modelo: <Center> lo centra
+          en el origen y <Bounds fit clip observe> ajusta la cámara
+          automáticamente para que el avatar siempre quede encuadrado,
+          sin importar las dimensiones del archivo .glb.
         */}
         <Canvas
-          camera={{ position: [0, 1.55, 2.2], fov: 40 }}
+          camera={{ position: [0, 0, 5], fov: 40 }}
           style={{ width: '100%', height: '100%', display: 'block' }}
         >
           <ambientLight intensity={1.0} />
           <directionalLight position={[2, 4, 3]} intensity={1.4} />
           <directionalLight position={[-2, 1, 1]} intensity={0.4} />
           <Suspense fallback={null}>
-            <ModeloAvatar hablando={hablando} />
+            <Bounds fit clip observe margin={1.1}>
+              <Center>
+                <ModeloAvatar hablando={hablando} />
+              </Center>
+            </Bounds>
           </Suspense>
-          {/* OrbitControls fijo: solo define el target, sin interacción del usuario */}
-          <OrbitControls
-            enablePan={false}
-            enableZoom={false}
-            enableRotate={false}
-            target={[0, 1.55, 0]}
-          />
         </Canvas>
       </LimiteErrorAvatar>
     </div>
