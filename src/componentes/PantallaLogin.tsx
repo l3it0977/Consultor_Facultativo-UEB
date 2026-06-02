@@ -23,9 +23,16 @@ function PantallaLogin({ onEntrar }: PantallaLoginProps) {
   return (
     <div className="login-wrapper">
       <div className="login-hero">
-        <div className="login-icono">🏛️</div>
+        <div className="login-emblema">
+          {/* Birrete académico */}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M22 10 12 5 2 10l10 5 10-5Z" />
+            <path d="M6 12v5c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5v-5" />
+            <path d="M22 10v6" />
+          </svg>
+        </div>
         <h1 className="login-facultad">Facultad de Ingeniería</h1>
-        <p className="login-universidad">Universidad Evangelica Boliviana · UEB</p>
+        <p className="login-universidad">Universidad Evangélica Boliviana · UEB</p>
       </div>
 
       <section className="tarjeta">
@@ -50,12 +57,19 @@ function PantallaLogin({ onEntrar }: PantallaLoginProps) {
 
           {mensajeError ? (
             <p className="mensaje-error" role="alert">
+              <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4M12 16h.01" />
+              </svg>
               {mensajeError}
             </p>
           ) : null}
 
           <button className="boton-principal" type="submit">
             Iniciar conversación
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
           </button>
         </form>
       </section>

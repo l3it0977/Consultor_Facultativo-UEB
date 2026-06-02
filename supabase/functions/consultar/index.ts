@@ -5,7 +5,7 @@
 
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-const MODELO_GEMINI = "gemini-3.5-flash";
+const MODELO_GEMINI = "gemini-2.5-flash";
 
 const headersCors = {
   "Access-Control-Allow-Origin": "*",

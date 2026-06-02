@@ -111,6 +111,10 @@ function PantallaChat({ nombre, onCerrarSesion }: PantallaChatProps) {
               onCerrarSesion()
             }}
           >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <path d="M16 17l5-5-5-5M21 12H9" />
+            </svg>
             Salir
           </button>
         </header>
@@ -138,8 +142,17 @@ function PantallaChat({ nombre, onCerrarSesion }: PantallaChatProps) {
             onChange={(evento) => setPregunta(evento.target.value)}
             disabled={cargando}
           />
-          <button className="boton-principal" type="submit" disabled={cargando}>
-            Enviar
+          <button
+            className="chat-enviar"
+            type="submit"
+            disabled={cargando}
+            aria-label="Enviar pregunta"
+          >
+            {/* Avión de papel */}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M22 2 11 13" />
+              <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
+            </svg>
           </button>
         </form>
       </div>
