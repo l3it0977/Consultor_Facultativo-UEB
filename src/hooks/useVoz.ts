@@ -1,5 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+// Nombres de voces masculinas en español según el navegador/sistema operativo.
+// La Web Speech API no expone el género, así que lo deducimos por el nombre.
+// (Windows: Pablo, Raúl; Edge/Online: Jorge, Álvaro; macOS: Jorge, Diego, etc.)
+const VOCES_MASCULINAS = [
+  'jorge', 'pablo', 'raul', 'raúl', 'diego', 'carlos', 'enrique', 'miguel',
+  'juan', 'alvaro', 'álvaro', 'gonzalo', 'lorenzo', 'roberto', 'andres',
+  'andrés', 'felipe', 'arnau', 'liam', 'male', 'hombre', 'masculino',
+]
+
+const esEspanol = (voz: SpeechSynthesisVoice) =>
+  voz.lang.toLowerCase().startsWith('es')
+
+const esMasculina = (voz: SpeechSynthesisVoice) => {
+  const nombre = voz.name.toLowerCase()
+  return VOCES_MASCULINAS.some((clave) => nombre.includes(clave))
+}
+
 // Envuelve la Web Speech API para que el avatar "hable" las respuestas.
 // Expone `hablando` (true mientras pronuncia) para animar el avatar.
 export function useVoz() {
@@ -9,14 +26,18 @@ export function useVoz() {
   )
   const vozRef = useRef<SpeechSynthesisVoice | null>(null)
 
-  // Selecciona una voz en español en cuanto el navegador las carga.
+  // Selecciona una voz MASCULINA en español en cuanto el navegador las carga.
+  // El avatar es masculino, así que evitamos las voces femeninas.
   useEffect(() => {
     if (!soportado) return
 
     const elegirVoz = () => {
       const voces = window.speechSynthesis.getVoices()
+      const espanolas = voces.filter(esEspanol)
       vozRef.current =
-        voces.find((voz) => voz.lang.toLowerCase().startsWith('es')) ??
+        espanolas.find(esMasculina) ?? // 1º: voz masculina en español
+        voces.find(esMasculina) ??     // 2º: cualquier voz masculina
+        espanolas[0] ??                // 3º: cualquier voz en español
         voces[0] ??
         null
     }

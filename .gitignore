@@ -19,6 +19,13 @@ dist-ssr
 .env.local
 .env.*.local
 *.env
+# (se conserva .env.example como plantilla sin claves)
+!.env.example
+
+# Supabase: artefactos locales del CLI (pueden contener claves/refs del proyecto)
+supabase/.temp/
+supabase/.branches/
+supabase/.env
 
 # Editor
 .vscode/*

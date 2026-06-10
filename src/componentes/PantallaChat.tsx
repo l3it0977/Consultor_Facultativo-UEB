@@ -6,6 +6,7 @@ import Mensaje, { type MensajeChat } from './Mensaje'
 
 type PantallaChatProps = {
   nombre: string
+  onVolver: () => void
   onCerrarSesion: () => void
 }
 
@@ -15,7 +16,7 @@ const crearId = () =>
 const construirSaludo = (nombre: string) =>
   `Hola ${nombre}, soy el asistente de la Facultad de Ingeniería. ¿En qué puedo ayudarte sobre nuestras carreras?`
 
-function PantallaChat({ nombre, onCerrarSesion }: PantallaChatProps) {
+function PantallaChat({ nombre, onVolver, onCerrarSesion }: PantallaChatProps) {
   const { hablar, detener, hablando } = useVoz()
   const [mensajes, setMensajes] = useState<MensajeChat[]>(() => [
     { id: crearId(), autor: 'bot', texto: construirSaludo(nombre) },
@@ -103,20 +104,36 @@ function PantallaChat({ nombre, onCerrarSesion }: PantallaChatProps) {
             <p className="chat-encabezado-titulo">Facultad de Ingeniería</p>
             <p className="chat-encabezado-subtitulo">Hola, {nombre} 👋</p>
           </div>
-          <button
-            type="button"
-            className="boton-salir"
-            onClick={() => {
-              detener()
-              onCerrarSesion()
-            }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <path d="M16 17l5-5-5-5M21 12H9" />
-            </svg>
-            Salir
-          </button>
+          <div className="chat-encabezado-acciones">
+            <button
+              type="button"
+              className="boton-salir"
+              onClick={() => {
+                detener()
+                onVolver()
+              }}
+              aria-label="Volver al inicio"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+              Inicio
+            </button>
+            <button
+              type="button"
+              className="boton-salir"
+              onClick={() => {
+                detener()
+                onCerrarSesion()
+              }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <path d="M16 17l5-5-5-5M21 12H9" />
+              </svg>
+              Salir
+            </button>
+          </div>
         </header>
 
         <div className="chat-mensajes">

@@ -65,11 +65,14 @@ function ModeloAvatar({ hablando }: ModeloProps) {
 
 type Avatar3DProps = {
   hablando: boolean
+  // Clase del contenedor: por defecto el panel del chat; la pantalla de voz
+  // pasa "voz-avatar-escena" para ocupar toda la pantalla.
+  className?: string
 }
 
-function Avatar3D({ hablando }: Avatar3DProps) {
+function Avatar3D({ hablando, className = 'avatar-contenedor' }: Avatar3DProps) {
   return (
-    <div className="avatar-contenedor">
+    <div className={className}>
       <LimiteErrorAvatar
         fallback={
           <div className={`avatar-placeholder ${hablando ? 'avatar-hablando' : ''}`}>
@@ -91,7 +94,7 @@ function Avatar3D({ hablando }: Avatar3DProps) {
           <directionalLight position={[2, 4, 3]} intensity={1.4} />
           <directionalLight position={[-2, 1, 1]} intensity={0.4} />
           <Suspense fallback={null}>
-            <Bounds fit clip margin={1.1}>
+            <Bounds fit clip margin={0.9}>
               <Center>
                 <ModeloAvatar hablando={hablando} />
               </Center>
